@@ -1,14 +1,14 @@
-import expressBasicAuth from "express-basic-auth";
-import { LogInRequest } from "../library/api/LogIn";
+import { DbUser } from "../library/model-db/DbUser";
 import AuthorizationRepository from "../repositories/AuthorizationRepository";
+import bcrypt from "bcrypt";
 
 const AuthorizationService = {
 
-    async verifyUser(logInRequest: LogInRequest) {
-        const dbUser = await AuthorizationRepository.selectByEmail(logInRequest.email);
-        if(!dbUser)
-            return false;
-        return expressBasicAuth.safeCompare(logInRequest.password, dbUser.passwd);
+    async getUser(email: string, password: string): Promise<DbUser | undefined> {
+        const dbUser = await AuthorizationRepository.selectByEmail(email);
+        if(dbUser && (await bcrypt.compare(password, dbUser.passwd)))
+            return dbUser;
+        return undefined;
     }
 
 };

@@ -10,3 +10,7 @@ export const Database = {
 export const Network = {
     PORT: process.env.NETWORK_PORT
 };
+
+export const Session = {
+    KEY: process.env.SESSION_KEY as string
+}

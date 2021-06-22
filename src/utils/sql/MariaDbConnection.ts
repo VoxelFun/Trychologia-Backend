@@ -1,6 +1,7 @@
 
 import mariaDb from "mariadb";
 import { Database } from "../../data/Env";
+import Logger from "../Logger";
 import SqlBuilder from "./SqlBuilder";
 import SqlResult from "./SqlResult";
 
@@ -17,14 +18,14 @@ async function queryMariaDb(createQuery: (sqlBuilder: SqlBuilder) => void): Prom
     try {
         const sqlBuilder = new SqlBuilder();
         createQuery(sqlBuilder);
-        console.log(sqlBuilder.get());
+        Logger.devLog(sqlBuilder.get());
         const result = await connection.query(sqlBuilder.get());
-        console.log(result);
+        Logger.devLog(result);
 
         return new SqlResult(result);
     } catch (error) {
-        console.log(error);
-        return undefined;
+        Logger.error(error);
+        return new SqlResult(undefined);
     } finally {
         connection.end();
     }

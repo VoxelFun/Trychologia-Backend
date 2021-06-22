@@ -43,7 +43,7 @@ class SqlObjectMapper<T> {
         })) as T;
     }
 
-    public tryGetObject(): T {
+    public tryGetObject(): T | undefined {
         if(this.isUndefined())
             return undefined;
         return this.getObject();

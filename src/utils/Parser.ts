@@ -1,6 +1,6 @@
 
 export default class Parser {
-    private pos: number;
+    private pos: number = 0;
 
     constructor(private readonly str: string) {
 

@@ -1,0 +1,1 @@
+INSERT INTO user (email, passwd) values ("naszyt@wp.pl", "polska");

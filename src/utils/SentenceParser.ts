@@ -22,7 +22,7 @@ export default class SentenceParser {
 }
 
 class Breaker {
-    private correct: number;
+    private correct: number = 0;
 
     constructor(private readonly value: string) {
 

@@ -1,9 +1,13 @@
 
 const Logger = {
 
-    exception(err: any) {
+    error(err: any) {
         console.log(err);
-    }
+    },
+
+    devLog(log: any) {
+        console.log(log);
+    },
 
 };
 
