@@ -11,6 +11,7 @@ const MariaDBStore = require('express-session-mariadb-store');
 import passport from "passport";
 import { Strategy } from 'passport-local';
 import AuthorizationService from './services/AuthorizationService';
+import { AuthenticationError } from './library/enum/AuthenticationError';
 
 const app = express();
 app.use(cors());
@@ -20,18 +21,18 @@ passport.use(new Strategy(
     {
         usernameField: "email"
     },
-    async (email: string, password: string, done: any) => {
+    async (email, password, done) => {
         const user = await AuthorizationService.getUser(email, password);
-        return done(null, user ? user : false);
+        return done(user ? null : AuthenticationError.USER_NOT_FOUND, user);
     }
 ));
 
-passport.serializeUser((user: any, done: any) => {
+passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-    const user = id ? {id: 2} : false; 
+passport.deserializeUser((id: number, done) => {
+    const user = id ? {id: id} : false; 
     done(null, user);
 });
 
@@ -50,11 +51,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.post("/login", (request, response, next) => {
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate("local", (error, user) => {
         request.login(user, (err) => {
-            console.log(request.session);
             console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`)
             console.log(`req.user: ${JSON.stringify(request.user)}`);
+            if(error === AuthenticationError.USER_NOT_FOUND || err)
+                return response.send({ok: false});
             return response.send('You were authenticated & logged in!\n');
         })
     })(request, response, next);
