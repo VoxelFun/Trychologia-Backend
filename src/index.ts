@@ -69,12 +69,4 @@ app.get('/', (_, res) => {
     res.end('Hello World\n');
 });
 
-app.get('/authrequired', (req, res) => {
-    if(req.isAuthenticated()) {
-      res.send('you hit the authentication endpoint\n')
-    } else {
-      res.redirect('/')
-    }
-  });
-
 app.listen(Network.PORT, () => console.log(`Running on port ${Network.PORT}`));
