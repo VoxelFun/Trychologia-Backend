@@ -14,7 +14,13 @@ import AuthorizationService from './services/AuthorizationService';
 import { AuthenticationError } from './library/enum/AuthenticationError';
 
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+    origin: process.env.FRONTEND_NETWORK_URL,
+    credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 passport.use(new Strategy(
@@ -32,7 +38,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id: number, done) => {
-    const user = id ? {id: id} : false; 
+    const user = id ? {id: id} : undefined; 
     done(null, user);
 });
 
@@ -50,17 +56,22 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.post("/login", (request, response, next) => {
+app.post("/api/login", (request, response, next) => {
     passport.authenticate("local", (error, user) => {
         request.login(user, (err) => {
             console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`)
             console.log(`req.user: ${JSON.stringify(request.user)}`);
             if(error === AuthenticationError.USER_NOT_FOUND || err)
                 return response.send({ok: false});
-            return response.send('You were authenticated & logged in!\n');
+            return response.send({ok: true});
         })
     })(request, response, next);
 });
+
+app.get("/api/logout", (request, response) => {
+    request.logout();
+    return response.status(200).json({});
+})
 
 app.use("/api", ApiController);
 

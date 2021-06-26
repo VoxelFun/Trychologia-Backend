@@ -3,6 +3,18 @@ export default class SqlResult {
 
     constructor(private value: any) {
     }
+
+    getAffectedRows() {
+        return this.value.affectedRows;
+    }
+
+    getInsertId() {
+        return this.value.insertId;
+    }
+    
+    public isPresent() {
+        return this.value.length >= 0;
+    }
     
     public toObject<T>() {
         return new SqlObjectMapper<T>(this.value).getObject();

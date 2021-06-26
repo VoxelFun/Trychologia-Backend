@@ -35,8 +35,10 @@ CREATE TABLE week_schedule (
 
 CREATE TABLE day_schedule (
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    day_id TINYINT UNSIGNED NOT NULL,
     start SMALLINT UNSIGNED NOT NULL,
     end SMALLINT UNSIGNED NOT NULL,
+    active BOOLEAN NOT NULL,
     week_schedule_id INT UNSIGNED NOT NULL,
     FOREIGN KEY (week_schedule_id) REFERENCES week_schedule(id)
 );

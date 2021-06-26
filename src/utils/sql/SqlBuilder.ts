@@ -1,6 +1,6 @@
 
 function valid(value: any) {
-	if(typeof value === 'number')
+	if(typeof value === 'number' || value === null || typeof value === 'boolean')
 		return value;
 	return `'${value}'`;
 }
@@ -71,11 +71,11 @@ class SqlBuilder {
 		return this.add(`UPDATE ${tableName} set ${equations}`);
 	}
 
-	public updateMany(tableName: string, dictionary: any[][]) {
+	public updateMany(tableName: string, columns: string[], values: any[]) {
 		const result = [];
-		for(const item of dictionary){
-			result.push(`${item[0]} = ${valid(item[1])}`);
-		}
+        for(let i = 0; i < columns.length; i++) {
+            result.push(`${columns[i]} = ${valid(values[i])}`);
+        }
 		return this.add(`UPDATE ${tableName} set ${this.join(result)}`);
 	}
 
