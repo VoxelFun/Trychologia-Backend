@@ -1,4 +1,5 @@
 import { DbStaffMember } from "../library/model-db/DbStaffMember";
+import { StaffMember } from "../library/model/StaffMember";
 import StaffMemberRepository from "../repositories/StaffMemberRepository";
 import WeekScheduleService from "./WeekScheduleService";
 
@@ -13,7 +14,12 @@ const StaffMemberService = {
     async getStaffMemberId(userId: number) {
         const staffMember = await StaffMemberRepository.selectByUserId(userId);
         return staffMember.id;
-    }
+    },
+
+    async setStaffMember(staffMember: StaffMember) {
+        const dbStaffMember = DbStaffMember.fromApi(staffMember);
+        await StaffMemberRepository.update(dbStaffMember);
+    },
 
 };
 

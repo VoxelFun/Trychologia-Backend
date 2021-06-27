@@ -18,6 +18,16 @@ const StaffMemberRepository = {
             )
             .whereEqual(StaffMemberTable.user_id, userId)
         )).toObject<DbStaffMember>();
+    },
+
+    async update(staffMember: DbStaffMember) {
+        (await queryMariaDb(sqlBuilder => sqlBuilder
+            .updateMany(
+                TableName.StaffMember,
+                [StaffMemberTable.name, StaffMemberTable.description],
+                [staffMember.name, staffMember.description]
+            ).whereEqual(StaffMemberTable.id, staffMember.id)
+        ));
     }
 
 };

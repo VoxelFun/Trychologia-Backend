@@ -1,5 +1,6 @@
 import * as express from "express";
 import { UpdateWeekScheduleRequest } from "../library/api/UpdateWeekSchedule";
+import { StaffMember } from "../library/model/StaffMember";
 import StaffMemberService from "../services/StaffMemberService";
 import WeekScheduleService from "../services/WeekScheduleService";
 
@@ -14,6 +15,12 @@ router.use((request, response, next) => {
 router.get("/staff-member/get", async (request, response) => {
     const staffMember = (await StaffMemberService.getStaffMember(request.user?.id!));
     response.json(staffMember);
+});
+
+router.post("/staff-member/set", async (request, response) => {
+    const staffMember = request.body as StaffMember;
+    await StaffMemberService.setStaffMember(staffMember);
+    response.send();
 });
 
 router.post("/week-schedule/update", async (request, response) => {
