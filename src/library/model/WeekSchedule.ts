@@ -1,8 +1,11 @@
+import { HashMap } from "../../utils/Delegate";
 import { DaySchedule, DummyDaySchedule } from "./DaySchedule";
+import { VisitsHolder } from "./VisitsHolder";
 
 export type WeekSchedule = {
     id: number;
     daySchedules: DaySchedule[];
+    visitsHolders: HashMap<number, VisitsHolder>;
 };
 
 const NonActiveDummyDaySchedule = {
@@ -20,5 +23,6 @@ export const DummyWeekSchedule : WeekSchedule = {
         DummyDaySchedule,
         NonActiveDummyDaySchedule,
         NonActiveDummyDaySchedule
-    ]
+    ],
+    visitsHolders: {}
 };

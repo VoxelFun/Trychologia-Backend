@@ -2,6 +2,7 @@ import WeekScheduleRepository from "../repositories/WeekScheduleRepository";
 import { DummyWeekSchedule, WeekSchedule } from "../library/model/WeekSchedule";
 import DayScheduleService from "./DayScheduleService";
 import { DbWeekSchedule } from "../library/model-db/DbWeekSchedule";
+import VisitsHolderService from "./VisitsHolderService";
 
 const WeekScheduleService = {
 
@@ -9,8 +10,9 @@ const WeekScheduleService = {
         const weekSchedule = await WeekScheduleRepository.selectByStaffMemberId(staffMemberId);
         if(!weekSchedule)
             return DummyWeekSchedule;
-        const daysSchedules = await DayScheduleService.getDaySchedules(weekSchedule.id);
-        return DbWeekSchedule.toApi(weekSchedule, daysSchedules);
+        const daysSchedulesTask = DayScheduleService.getDaySchedules(weekSchedule.id);
+        const visitsHoldersTask = VisitsHolderService.getVisitsHolders(weekSchedule.id);
+        return DbWeekSchedule.toApi(weekSchedule, await daysSchedulesTask, await visitsHoldersTask);
     },
 
     async saveWeekSchedule(staffMemberId: number, weekSchedule: WeekSchedule) {

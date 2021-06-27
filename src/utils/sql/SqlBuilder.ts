@@ -135,7 +135,11 @@ class SqlBuilder {
 }
 
 export enum Formula {
-    EQUAL = "="
+    EQUAL = "=",
+    BIGGER_THAN = ">",
+    BIGGER_OR_EQUAL = ">=",
+    SMALLER_THAN = "<",
+    SMALLER_OR_EQUAL = "<"
 }
 
 export enum Order {

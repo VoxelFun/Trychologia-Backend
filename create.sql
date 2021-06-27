@@ -45,9 +45,9 @@ CREATE TABLE day_schedule (
 
 CREATE TABLE visit_holder (
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    date CHAR(10) NOT NULL,
-    staff_member_id TINYINT UNSIGNED NOT NULL,
-    FOREIGN KEY (staff_member_id) REFERENCES staff_member(id)
+    day SMALLINT NOT NULL,
+    week_schedule_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (week_schedule_id) REFERENCES week_schedule(id)
 );
 
 CREATE TABLE visit (

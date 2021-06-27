@@ -29,6 +29,7 @@
     "express-session": "^1.17.2",
     "express-session-mariadb-store": "^0.1.1",
     "mariadb": "^2.5.4",
+    "moment": "^2.29.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
   }
