@@ -3,6 +3,7 @@ import { DummyWeekSchedule, WeekSchedule } from "../library/model/WeekSchedule";
 import DayScheduleService from "./DayScheduleService";
 import { DbWeekSchedule } from "../library/model-db/DbWeekSchedule";
 import VisitsHolderService from "./VisitsHolderService";
+import { SafeWeekSchedule } from "../library/model/SafeWeekSchedule";
 
 const WeekScheduleService = {
 
@@ -23,7 +24,14 @@ const WeekScheduleService = {
             WeekScheduleRepository.update(dbWeekSchedule);
         }
         DayScheduleService.saveDaySchedules(dbWeekSchedule.id, weekSchedule.daySchedules);
-    }
+    },
+
+    toSafeWeekSchedule(weekSchedule: WeekSchedule): SafeWeekSchedule {
+        return {
+            daySchedules: weekSchedule.daySchedules,
+            visitsHolders: VisitsHolderService.toSafeVisitsHolders(weekSchedule.visitsHolders)
+        }
+    },
 
 };
 

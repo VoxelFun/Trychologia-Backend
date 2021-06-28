@@ -1,8 +1,11 @@
 import { WeekSchedule } from "./WeekSchedule";
 
-export type StaffMember = {
-    id: number;
+export type StaffMemberGeneral<T> = {
     name: string;
     description: string;
-    weekSchedule: WeekSchedule;
+    weekSchedule: T;
+}
+
+export type StaffMember = StaffMemberGeneral<WeekSchedule> & {
+    id: number;
 };

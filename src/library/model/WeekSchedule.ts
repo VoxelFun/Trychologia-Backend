@@ -2,10 +2,13 @@ import { HashMap } from "../../utils/Delegate";
 import { DaySchedule, DummyDaySchedule } from "./DaySchedule";
 import { VisitsHolder } from "./VisitsHolder";
 
-export type WeekSchedule = {
-    id: number;
+export type WeekScheduleGeneral<T> = {
     daySchedules: DaySchedule[];
-    visitsHolders: HashMap<number, VisitsHolder>;
+    visitsHolders: HashMap<number, T>;
+}
+
+export type WeekSchedule = WeekScheduleGeneral<VisitsHolder> & {
+    id: number;
 };
 
 const NonActiveDummyDaySchedule = {

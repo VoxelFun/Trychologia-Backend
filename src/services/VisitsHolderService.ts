@@ -3,6 +3,8 @@ import { VisitsHolder } from "../library/model/VisitsHolder";
 import { DbVisitsHolder } from "../library/model-db/DbVisitsHolder";
 import VisitService from "./VisitService";
 import { CollectionUtils } from "../utils/CollectionUtils";
+import { SafeVisitsHolder } from "../library/model/SafeVisitsHolder";
+import { HashMap } from "../utils/Delegate";
 
 const VisitsHolderService = {
 
@@ -24,7 +26,19 @@ const VisitsHolderService = {
         //     VisitsHolderRepository.update(dbVisitsHolder);
         // }
         // DayScheduleService.saveDaySchedules(dbVisitsHolder.id, VisitsHolder.daySchedules);
-    }
+    },
+
+    toSafeVisitsHolders(visitsHolders: HashMap<number, VisitsHolder>): HashMap<number, SafeVisitsHolder> {
+        const keys = Object.keys(visitsHolders);
+        const values = Object.values(visitsHolders);
+        return CollectionUtils.toHashMap(
+            values,
+            (_, i) => keys[i],
+            visitsHolder => ({
+                visits: VisitService.toSafeVisits(visitsHolder.visits)
+            }),
+        );
+    },
 
 };
 

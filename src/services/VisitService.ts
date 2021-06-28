@@ -4,6 +4,7 @@ import DayScheduleService from "./DayScheduleService";
 import { DbVisit } from "../library/model-db/DbVisit";
 import CustomerService from "./CustomerService";
 import { DbVisitsHolder } from "../library/model-db/DbVisitsHolder";
+import { SafeVisit } from "../library/model/SafeVisit";
 
 const VisitService = {
 
@@ -25,7 +26,14 @@ const VisitService = {
         //     VisitRepository.update(dbVisit);
         // }
         // DayScheduleService.saveDaySchedules(dbVisit.id, Visit.daySchedules);
-    }
+    },
+
+    toSafeVisits(visits: Visit[]): SafeVisit[] {
+        return visits.map(visit => ({
+            start: visit.start,
+            end: visit.end
+        }));
+    },
 
 };
 

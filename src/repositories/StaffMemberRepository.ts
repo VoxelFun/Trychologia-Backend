@@ -6,6 +6,19 @@ import { TableName } from "./tables/TableName";
 
 const StaffMemberRepository = {
 
+    async selectAll() {
+        return (await queryMariaDb(sqlBuilder => sqlBuilder
+            .select(
+                TableName.StaffMember,
+                [
+                    StaffMemberTable.id,
+                    StaffMemberTable.name,
+                    StaffMemberTable.description
+                ]
+            )
+        )).toObjects<DbStaffMember>();
+    },
+
     async selectByUserId(userId: number) {
         return (await queryMariaDb(sqlBuilder => sqlBuilder
             .select(
