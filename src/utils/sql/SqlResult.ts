@@ -13,7 +13,7 @@ export default class SqlResult {
     }
     
     public isPresent() {
-        return this.value.length >= 0;
+        return this.value.length > 0;
     }
     
     public toObject<T>() {
@@ -36,7 +36,7 @@ class SqlObjectMapper<T> {
     private index: number = 0;
 
     constructor(private value: any) {
-        this.keys = value.length > 0 ? Object.keys(value[0]) : [];
+        this.keys = value?.length > 0 ? Object.keys(value[0]) : [];
         this.newKeys = this.keys.map(key => this.getColumnNameAsVariableName(key));
     }
 

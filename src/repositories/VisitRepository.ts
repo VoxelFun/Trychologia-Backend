@@ -5,6 +5,15 @@ import VisitTable from "./tables/VisitTable";
 
 const VisitRepository = {
 
+    async exists(visit: DbVisit) {
+        return (await queryMariaDb(sqlBuilder => sqlBuilder
+            .selectAll(TableName.Visit)
+            .whereEqual(VisitTable.visit_holder_id, visit.visitsHolderId)
+            .add(` AND ${visit.start} BETWEEN ${VisitTable.start} AND ${VisitTable.end}`)
+            .add(` AND ${visit.end} BETWEEN ${VisitTable.start} AND ${VisitTable.end}`)
+        )).isPresent();
+    },
+
     async insert(dbVisit: DbVisit) {
         dbVisit.id = (await queryMariaDb(sqlBuilder => sqlBuilder
             .insert(

@@ -28,6 +28,7 @@ const WeekScheduleService = {
 
     toSafeWeekSchedule(weekSchedule: WeekSchedule): SafeWeekSchedule {
         return {
+            id: weekSchedule.id,
             daySchedules: weekSchedule.daySchedules,
             visitsHolders: VisitsHolderService.toSafeVisitsHolders(weekSchedule.visitsHolders)
         }

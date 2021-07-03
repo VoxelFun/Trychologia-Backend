@@ -5,8 +5,36 @@ import VisitService from "./VisitService";
 import { CollectionUtils } from "../utils/CollectionUtils";
 import { SafeVisitsHolder } from "../library/model/SafeVisitsHolder";
 import { HashMap } from "../utils/Delegate";
+import { VisitMeta } from "../library/model/VisitMeta";
+import { BookVisitRequest } from "../library/api/BookVisit";
+import { VisitType } from "../library/model/Visit";
+import { Day } from "../library/utils/Day";
 
 const VisitsHolderService = {
+
+    async bookVisit(data: BookVisitRequest) {
+        const visitsHolder = await VisitsHolderService.tryGetVisitsHolder(data);
+        const dayNow = Day.now.getValue();
+        if(data.day < dayNow)
+            throw new Error("Incorrect visit day");
+        await VisitService.bookVisit(data.customer, {
+            id: -1,
+            type: VisitType.CUSTOMER,
+            end: data.end,
+            start: data.minutes,
+            visitsHolderId: visitsHolder.id
+        }, data.day === dayNow);
+    },
+
+    async createVisitsHolder(visitMeta: VisitMeta) {
+        const visitsHolder: DbVisitsHolder = {
+            id: -1,
+            day: visitMeta.day,
+            weekScheduleId: visitMeta.weekSchedulerId
+        };
+        await VisitsHolderRepository.insert(visitsHolder);
+        return visitsHolder;
+    },
 
     async getVisitsHolders(weekScheduleId: number) {
         const visitsHolders = await VisitsHolderRepository.selectByWeekScheduleId(weekScheduleId);
@@ -16,6 +44,13 @@ const VisitsHolderService = {
             visitsHolder => visitsHolder.day,
             (visitsHolder, i) => DbVisitsHolder.toApi(visitsHolder, visits[i])
         );
+    },
+
+    async tryGetVisitsHolder(visitMeta: VisitMeta) {
+        const visitsHolder = await VisitsHolderRepository.selectByDay(visitMeta.day);
+        if(visitsHolder)
+            return visitsHolder;
+        return VisitsHolderService.createVisitsHolder(visitMeta);
     },
 
     async saveVisitsHolder(staffMemberId: number, VisitsHolder: VisitsHolder) {

@@ -3,12 +3,13 @@ import { DaySchedule, DummyDaySchedule } from "./DaySchedule";
 import { VisitsHolder } from "./VisitsHolder";
 
 export type WeekScheduleGeneral<T> = {
+    id: number;
     daySchedules: DaySchedule[];
     visitsHolders: HashMap<number, T>;
 }
 
 export type WeekSchedule = WeekScheduleGeneral<VisitsHolder> & {
-    id: number;
+    
 };
 
 const NonActiveDummyDaySchedule = {

@@ -9,7 +9,7 @@ class SqlBuilder {
 
 	private str = ``;
 
-	private add(v: string) {
+	public add(v: string) {
 		this.str += v;
 		return this;
 	}

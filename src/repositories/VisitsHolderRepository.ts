@@ -17,6 +17,13 @@ const VisitsHolderRepository = {
         )).getInsertId();
     },
 
+    async selectByDay(day: number) {
+        return (await queryMariaDb(sqlBuilder => sqlBuilder
+            .selectAll(TableName.VisitsHolder)
+            .whereEqual(VisitsHolderTable.day, day)
+        )).tryToObject<DbVisitsHolder>();
+    },
+
     async selectByWeekScheduleId(weekScheduleId: number) {
         return (await queryMariaDb(sqlBuilder => sqlBuilder
             .selectAll(TableName.VisitsHolder)

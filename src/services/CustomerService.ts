@@ -14,14 +14,9 @@ const CustomerService = {
         return Promise.all(visits.map(visit => CustomerService.getCustomer(visit.id)));
     },
 
-    async saveCustomer(staffMemberId: number, Customer: Customer) {
-        // const dbCustomer = DbCustomer.fromApi(staffMemberId, Customer);
-        // if (dbCustomer.id < 0) {
-        //     await CustomerRepository.insert(dbCustomer);
-        // } else {
-        //     CustomerRepository.update(dbCustomer);
-        // }
-        // DayScheduleService.saveDaySchedules(dbCustomer.id, Customer.daySchedules);
+    async createCustomer(visitId: number, customer: Customer) {
+        const dbCustomer = DbCustomer.fromApi(visitId, customer);
+        await CustomerRepository.insert(dbCustomer);
     }
 
 };

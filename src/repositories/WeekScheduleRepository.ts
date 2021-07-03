@@ -5,13 +5,6 @@ import WeekScheduleTable from "./tables/WeekScheduleTable";
 
 const WeekScheduleRepository = {
 
-    async exists(staffMemberId: number) {
-        return (await queryMariaDb(sqlBuilder => sqlBuilder
-            .count(TableName.WeekSchedule)
-            .whereEqual(WeekScheduleTable.staff_member_id, staffMemberId)
-        )).isPresent();
-    },
-
     async insert(dbWeekSchedule: DbWeekSchedule) {
         dbWeekSchedule.id = (await queryMariaDb(sqlBuilder => sqlBuilder
             .insert(

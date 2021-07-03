@@ -5,8 +5,21 @@ import { DbVisit } from "../library/model-db/DbVisit";
 import CustomerService from "./CustomerService";
 import { DbVisitsHolder } from "../library/model-db/DbVisitsHolder";
 import { SafeVisit } from "../library/model/SafeVisit";
+import { Hour } from "../library/utils/Hour";
+import { Customer } from "../library/model/Customer";
 
 const VisitService = {
+
+    async bookVisit(customer: Customer, dbVisit: DbVisit, today: boolean) {
+        const now = Hour.now;
+        if(today)
+            if(new Hour(dbVisit.start).isBefore(now) || new Hour(dbVisit.end).isBefore(now))
+                throw new Error("Incorrect visit hour");
+        if(await VisitRepository.exists(dbVisit))
+            throw new Error("Visit already exists");
+        await VisitRepository.insert(dbVisit);
+        await CustomerService.createCustomer(dbVisit.id, customer);
+    },
 
     async getVisits(visitsHolderId: number) {
         const visits = await VisitRepository.selectByVisitsHolderId(visitsHolderId);
@@ -16,16 +29,6 @@ const VisitService = {
 
     async getHoldersVisits(visitsHolders: DbVisitsHolder[]) {
         return Promise.all(visitsHolders.map(visitsHolder => VisitService.getVisits(visitsHolder.id)));
-    },
-
-    async saveVisit(staffMemberId: number, Visit: Visit) {
-        // const dbVisit = DbVisit.fromApi(staffMemberId, Visit);
-        // if (dbVisit.id < 0) {
-        //     await VisitRepository.insert(dbVisit);
-        // } else {
-        //     VisitRepository.update(dbVisit);
-        // }
-        // DayScheduleService.saveDaySchedules(dbVisit.id, Visit.daySchedules);
     },
 
     toSafeVisits(visits: Visit[]): SafeVisit[] {
