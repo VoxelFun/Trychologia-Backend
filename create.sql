@@ -65,5 +65,5 @@ CREATE TABLE customer (
     email VARCHAR(50),
     phone VARCHAR(20),
     visit_id INT UNSIGNED NOT NULL,
-    FOREIGN KEY (visit_id) REFERENCES visit(id)
+    FOREIGN KEY (visit_id) REFERENCES visit(id) ON DELETE CASCADE
 );

@@ -6,6 +6,5 @@ export function getBookVisitRoute() {
 }
 
 export interface BookVisitRequest extends VisitMeta {
-    end: number;
     customer: Customer;
 }

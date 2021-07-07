@@ -1,5 +1,5 @@
 import VisitRepository from "../repositories/VisitRepository";
-import { Visit } from "../library/model/Visit";
+import { Visit, VisitType } from "../library/model/Visit";
 import DayScheduleService from "./DayScheduleService";
 import { DbVisit } from "../library/model-db/DbVisit";
 import CustomerService from "./CustomerService";
@@ -11,10 +11,7 @@ import { Customer } from "../library/model/Customer";
 const VisitService = {
 
     async bookVisit(customer: Customer, dbVisit: DbVisit, today: boolean) {
-        const now = Hour.now;
-        if(today)
-            if(new Hour(dbVisit.start).isBefore(now) || new Hour(dbVisit.end).isBefore(now))
-                throw new Error("Incorrect visit hour");
+        checkIfBefore(dbVisit, today);
         if(await VisitRepository.exists(dbVisit))
             throw new Error("Visit already exists");
         await VisitRepository.insert(dbVisit);
@@ -31,6 +28,13 @@ const VisitService = {
         return Promise.all(visitsHolders.map(visitsHolder => VisitService.getVisits(visitsHolder.id)));
     },
 
+    async saveVisit(dbVisit: DbVisit, today: boolean) {
+        checkIfBefore(dbVisit, today);
+        await VisitRepository.deleteAllBetween(dbVisit);
+        if(dbVisit.type !== VisitType.FREE)
+            await VisitRepository.insert(dbVisit);
+    },
+
     toSafeVisits(visits: Visit[]): SafeVisit[] {
         return visits.map(visit => ({
             start: visit.start,
@@ -41,3 +45,10 @@ const VisitService = {
 };
 
 export default VisitService;
+
+function checkIfBefore(dbVisit: DbVisit, today: boolean) {
+    const now = Hour.now;
+    if(today)
+        if(new Hour(dbVisit.start).isBefore(now) || new Hour(dbVisit.end).isBefore(now))
+            throw new Error("Incorrect visit hour");
+}
