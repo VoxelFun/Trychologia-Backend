@@ -8,9 +8,10 @@ const VisitRepository = {
     async deleteAllBetween(visit: DbVisit) {
         (await queryMariaDb(sqlBuilder => sqlBuilder
             .delete(TableName.Visit)
-            .add(" WHERE ")
-            .add(` (${VisitTable.start} BETWEEN ${visit.start} AND ${visit.end}`)
-            .add(` OR ${VisitTable.end} BETWEEN ${visit.start} AND ${visit.end})`)
+            .whereEqual(VisitTable.visit_holder_id, visit.visitsHolderId)
+            .add(` AND (${visit.start} >= ${VisitTable.start} AND ${visit.start} < ${VisitTable.end}`)
+            .add(` OR ${visit.end} > ${VisitTable.start} AND ${visit.end} <= ${VisitTable.end}`)
+            .add(` OR ${visit.start} < ${VisitTable.start} AND ${visit.end} > ${VisitTable.end})`)
         ));
     },
 
@@ -18,8 +19,9 @@ const VisitRepository = {
         return (await queryMariaDb(sqlBuilder => sqlBuilder
             .selectAll(TableName.Visit)
             .whereEqual(VisitTable.visit_holder_id, visit.visitsHolderId)
-            .add(` AND (${visit.start} BETWEEN ${VisitTable.start} AND ${VisitTable.end}`)
-            .add(` OR ${visit.end} BETWEEN ${VisitTable.start} AND ${VisitTable.end})`)
+            .add(` AND (${visit.start} >= ${VisitTable.start} AND ${visit.start} < ${VisitTable.end}`)
+            .add(` OR ${visit.end} > ${VisitTable.start} AND ${visit.end} <= ${VisitTable.end}`)
+            .add(` OR ${visit.start} < ${VisitTable.start} AND ${visit.end} > ${VisitTable.end})`)
         )).isPresent();
     },
 
