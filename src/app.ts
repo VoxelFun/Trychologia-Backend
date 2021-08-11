@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({path:__dirname+'/./../.env'});
 
 import express from 'express';
 import { Database, Network, Session } from './data/Env';
@@ -46,7 +46,8 @@ app.use(session({
     store: new MariaDBStore({
         user: Database.USER,
         password: Database.PASSWORD,
-        database: Database.NAME
+        database: Database.NAME,
+        host: Database.HOST
     }),
     secret: Session.KEY,
     resave: false,
@@ -59,8 +60,8 @@ app.use(passport.session());
 app.post("/api/login", (request, response, next) => {
     passport.authenticate("local", (error, user) => {
         request.login(user, (err) => {
-            console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`)
-            console.log(`req.user: ${JSON.stringify(request.user)}`);
+            // console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`)
+            // console.log(`req.user: ${JSON.stringify(request.user)}`);
             if(error === AuthenticationError.USER_NOT_FOUND || err)
                 return response.send({ok: false});
             return response.send({ok: true});
