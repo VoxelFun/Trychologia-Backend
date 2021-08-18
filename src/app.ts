@@ -16,13 +16,7 @@ import { AuthenticationError } from './library/enum/AuthenticationError';
 const app = express();
 
 const corsOptions = {
-    origin: function (origin: string, callback: any) {
-        if (origin.replace("www.", "") === process.env.FRONTEND_NETWORK_URL) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: process.env.FRONTEND_NETWORK_URL!.split(";"),
     credentials: true
 };
 
