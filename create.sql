@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS trychologia;
+
+USE trychologia;
+
 DROP TABLE IF EXISTS session;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS visit;
