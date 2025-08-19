@@ -81,4 +81,5 @@ app.get('/', (_, res) => {
     res.end('Hello World\n');
 });
 
-app.listen(Network.PORT, () => console.log(`Running on port ${Network.PORT}`));
+let port = process.env.PORT || Network.PORT;
+app.listen(port, () => console.log(`Running on port ${port}`));

@@ -28,7 +28,7 @@ const VisitsHolderRepository = {
         return (await queryMariaDb(sqlBuilder => sqlBuilder
             .selectAll(TableName.VisitsHolder)
             .whereEqual(VisitsHolderTable.week_schedule_id, weekScheduleId)
-            .and(VisitsHolderTable.day, Formula.BIGGER_OR_EQUAL, Day.now.subtract(1).getValue())
+            .and(VisitsHolderTable.day, Formula.BIGGER_OR_EQUAL, Day.now.subtract(7).getValue())
             .orderBy(VisitsHolderTable.day)
         )).toObjects<DbVisitsHolder>();
     },
